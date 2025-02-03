@@ -199,6 +199,7 @@ if (!class_exists('Felan_Freelancer')) {
             $freelancer_cover_image_url        = isset($_REQUEST['freelancer_cover_image_url']) ? felan_clean(wp_unslash($_REQUEST['freelancer_cover_image_url'])) : '';
             $author_avatar_image_id           = isset($_REQUEST['author_avatar_image_id']) ? felan_clean(wp_unslash($_REQUEST['author_avatar_image_id'])) : '';
             $author_avatar_image_url           = isset($_REQUEST['author_avatar_image_url']) ? felan_clean(wp_unslash($_REQUEST['author_avatar_image_url'])) : '';
+            $ium_is_first_login           = $_POST['ium_is_first_login'];
 
             $freelancer_resume           = isset($_REQUEST['freelancer_resume']) ? felan_clean(wp_unslash($_REQUEST['freelancer_resume'])) : '';
 
@@ -220,7 +221,7 @@ if (!class_exists('Felan_Freelancer')) {
             $freelancer_video_url              = isset($_REQUEST['freelancer_video_url']) ? felan_clean(wp_unslash($_REQUEST['freelancer_video_url'])) : '';
             $freelancer_profile_strength         = isset($_REQUEST['freelancer_profile_strength']) ? felan_clean(wp_unslash($_REQUEST['freelancer_profile_strength'])) : '';
             $custom_field_freelancer        = isset($_REQUEST['custom_field_freelancer']) ? felan_clean(wp_unslash($_REQUEST['custom_field_freelancer'])) : '';
-
+            
             global $current_user;
             wp_get_current_user();
             $user_id = $current_user->ID;
@@ -240,7 +241,13 @@ if (!class_exists('Felan_Freelancer')) {
             $new_freelancer['post_status'] = $archive_freelancer_stautus;
 
             $freelancer_id = wp_update_post($new_freelancer);
-
+            if (isset($ium_is_first_login)) {
+                update_user_meta($user_id, 'ium_is_first_login', $ium_is_first_login);
+                update_user_meta($user_id, 'author_avatar_image_id', $author_avatar_image_id);
+                update_user_meta($user_id, 'author_avatar_image_url', $author_avatar_image_url);
+            } else {
+                $ium_is_first_login = 0;
+            }
             echo json_encode(array('success' => true));
 
             if ($freelancer_id > 0) {
@@ -386,6 +393,7 @@ if (!class_exists('Felan_Freelancer')) {
                 if (isset($author_avatar_image_id) && isset($author_avatar_image_url)) {
                     update_user_meta($user_id, 'author_avatar_image_id', $author_avatar_image_id);
                     update_user_meta($user_id, 'author_avatar_image_url', $author_avatar_image_url);
+                    update_user_meta($user_id, 'ium_is_first_login', $ium_is_first_login);
                 } else {
                     delete_user_meta($user_id, 'author_avatar_image_id');
                     delete_user_meta($user_id, 'author_avatar_image_url');
