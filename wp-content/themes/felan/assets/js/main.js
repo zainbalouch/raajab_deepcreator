@@ -935,7 +935,7 @@ var FELAN = FELAN || {};
               required: true,
             },
           },
-          submitHandler: function (form) {
+          submitHandler: function (form) {            
             $.ajax({
               url: ajax_url,
               type: "POST",
@@ -947,6 +947,7 @@ var FELAN = FELAN || {};
                   .val(),
                 firstname: _this.find('input[name="reg_firstname"]').val(),
                 lastname: _this.find('input[name="reg_lastname"]').val(),
+                ium_is_first_login: _this.find('input[name="ium_is_first_login"]').val(),
                 companyname: _this.find('input[name="reg_company_name"]').val(),
                 email: _this.find('input[name="reg_email"]').val(),
                 phone: _this.find('input[name="reg_phone"]').val(),
@@ -965,6 +966,8 @@ var FELAN = FELAN || {};
                 $(".popup-account .loading-effect").fadeIn();
               },
               success: function (data) {
+                console.log('data', data);
+                
                 _this.find("p.msg").text(data.messages);
                 if (data.verify == true) {
                   _this.find("p.msg").addClass(data.class);

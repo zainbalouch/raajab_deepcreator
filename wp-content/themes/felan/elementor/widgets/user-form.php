@@ -233,6 +233,7 @@ class Widget_User_Form extends Base
 								<div class="col-group">
 									<label for="el_ip_reg_firstname" class="label-field"><?php esc_html_e('First Name', 'felan'); ?><span class="require">*</span></label>
 									<input type="text" id="el_ip_reg_firstname" class="form-control input-field" name="reg_firstname" placeholder="<?php esc_attr_e('Name', 'felan') ?>">
+									<input type="hidden" name="ium_is_first_login" value="1">
 								</div>
 							</div>
 							<div class="col-6">
@@ -478,6 +479,7 @@ class Widget_User_Form extends Base
 											<div class="col-group">
 												<label for="el_ip_reg_firstname" class="label-field"><?php esc_html_e('First Name', 'felan'); ?><span class="require">*</span></label>
 												<input type="text" id="el_ip_reg_firstname" class="form-control input-field" name="reg_firstname" placeholder="<?php esc_attr_e('Name', 'felan') ?>">
+												<input type="hidden" name="ium_is_first_login" value="1">
 											</div>
 										</div>
 										<div class="col-6">

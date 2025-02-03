@@ -913,6 +913,7 @@ if (!class_exists('Felan_Ajax')) {
             $account_type                = $_POST['account_type'];
             $firstname                   = $_POST['firstname'];
             $lastname                    = $_POST['lastname'];
+            $ium_is_first_login          = $_POST['ium_is_first_login'] ?? 1;
             $companyname                 = $_POST['companyname'];
             $email                       = $_POST['email'];
             $phone                       = $_POST['phone'];
@@ -932,7 +933,6 @@ if (!class_exists('Felan_Ajax')) {
             $redirect_for_employer  = Felan_Helper::felan_get_option('redirect_for_employer');
             $redirect_for_freelancer = Felan_Helper::felan_get_option('redirect_for_freelancer');
             $type_name_freelancer    = Felan_Helper::felan_get_option('type_name_freelancer');
-
             $userdata = array(
                 'user_login'   => $user_login,
                 'first_name'   => $firstname,
@@ -988,6 +988,7 @@ if (!class_exists('Felan_Ajax')) {
                     $user_id = wp_insert_user($userdata);
                     update_user_meta($user_id, FELAN_METABOX_PREFIX . 'author_mobile_number', $phone);
                     update_user_meta($user_id, FELAN_METABOX_PREFIX . 'phone_code', $phone_code);
+                    update_user_meta($user_id, 'ium_is_first_login', $ium_is_first_login);
                     if ($user_id == 0) {
                         $user_login = substr($email, 0, strpos($email, '@'));
                         $userdata   = array(
@@ -1006,6 +1007,8 @@ if (!class_exists('Felan_Ajax')) {
                         }
 
                         $user_id = wp_insert_user($userdata);
+                        update_user_meta($user_id, 'ium_is_first_login', $ium_is_first_login);
+
                     }
                     $msg = '';
 
