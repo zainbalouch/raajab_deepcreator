@@ -26,21 +26,21 @@ add_action('wp_enqueue_scripts', 'image_replacement_api_init');
 function handle_image_replacement() {
     // Check if the required data is sent
     if (isset($_POST['image_url'])) {
-        // $image_url = sanitize_text_field($_POST['image_url']);
-        $image_url = 'https://i1.rgstatic.net/ii/profile.image/11431281111388999-1672948153451_Q512/Zain-Ul-Eman.jpg';
+        $image_url = sanitize_text_field($_POST['image_url']);
+        // $image_url = 'https://i1.rgstatic.net/ii/profile.image/11431281111388999-1672948153451_Q512/Zain-Ul-Eman.jpg';
         $style_image_url = 'https://pics.craiyon.com/2023-09-05/803e50d8347b470e8cb6b1eff41132bb.webp';
         $text_prompt = 'make it animated Cyberpunk style character';
 
         // Step 1: Make a POST request to the cartoon API to generate the image
-        // $cartoon_response = generate_cartoon_image($image_url, $style_image_url, $text_prompt);
+        $cartoon_response = generate_cartoon_image($image_url, $style_image_url, $text_prompt);
         
-        // if (is_wp_error($cartoon_response)) {
-        //     wp_send_json_error(array('message' => $cartoon_response->get_error_message()));
-        //     wp_die();
-        // }
+        if (is_wp_error($cartoon_response)) {
+            wp_send_json_error(array('message' => $cartoon_response->get_error_message()));
+            wp_die();
+        }
 
-        // $order_id = $cartoon_response['orderId'];
-        $order_id = '7e659a3327f848e6a5586f1c49d3d996';
+        $order_id = $cartoon_response['orderId'];
+        // $order_id = '7e659a3327f848e6a5586f1c49d3d996';
         
         // Step 2: Make a POST request to the order-status API to get the image URL
         $status_response = get_image_generation_status($order_id);
