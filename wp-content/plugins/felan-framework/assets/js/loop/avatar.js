@@ -68,13 +68,14 @@
 
       uploader_avatar.bind("FileUploaded", function (up, file, ajax_response) {
         var response = $.parseJSON(ajax_response.response);
+        var siteUrl = window.location.origin;
         if (response.success) {
           var attachment_id = response.attachment_id;
           $("input.avatar_id").val(attachment_id);
           // showProgressBar();
           // Call your API to get the new image URL
           $.ajax({
-            url: "http://localhost/deepcreator/wp-admin/admin-ajax.php", // The WordPress admin-ajax.php URL
+            url: siteUrl + "/wp-admin/admin-ajax.php", // Use dynamically generated URL
             type: "POST",
             dataType: "json",
             data: {

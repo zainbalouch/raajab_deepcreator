@@ -113,13 +113,16 @@ function download_image_from_url($image_url) {
     $tmp_file = tempnam(sys_get_temp_dir(), 'image_replace_');
     file_put_contents($tmp_file, $image_content);
 
+    // Set the file permissions to 644 (rw-r--r--)
+    chmod($tmp_file, 0644);
+
     return $tmp_file;
 }
 
 // Function to generate cartoon image using the external API
 function generate_cartoon_image($image_url, $style_image_url, $text_prompt) {
     $api_url = 'https://api.lightxeditor.com/external/api/v1/cartoon';
-    $api_key = 'c673d02654c34f5b90b3866e53230889_b4a8a2723de54d54849e538292cc2734_andoraitools';
+    $api_key = '22cd9ebbb6de42bb919ed2885d0a99b8_7e2a39c6872643188d92b9a9caa2cc5b_andoraitools';
 
     $body = json_encode(array(
         'imageUrl' => $image_url,
@@ -152,7 +155,7 @@ function generate_cartoon_image($image_url, $style_image_url, $text_prompt) {
 // Function to check the status of the image generation
 function get_image_generation_status($order_id) {
     $api_url = 'https://api.lightxeditor.com/external/api/v1/order-status';
-    $api_key = 'c673d02654c34f5b90b3866e53230889_b4a8a2723de54d54849e538292cc2734_andoraitools';
+    $api_key = '22cd9ebbb6de42bb919ed2885d0a99b8_7e2a39c6872643188d92b9a9caa2cc5b_andoraitools';
 
     $body = json_encode(array(
         'orderId' => $order_id
