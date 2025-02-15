@@ -28,8 +28,26 @@ function handle_image_replacement() {
     if (isset($_POST['image_url'])) {
         $image_url = sanitize_text_field($_POST['image_url']);
         // $image_url = 'https://i1.rgstatic.net/ii/profile.image/11431281111388999-1672948153451_Q512/Zain-Ul-Eman.jpg';
-        $style_image_url = 'https://pics.craiyon.com/2023-09-05/803e50d8347b470e8cb6b1eff41132bb.webp';
-        $text_prompt = 'make it animated Cyberpunk style character';
+        $image_directory = ABSPATH . 'wp-content/uploads/demo_images/';
+        // Get all image files in the folder (you can adjust the file extensions if needed)
+        $image_files = glob($image_directory . '*.{jpg,jpeg,png,webp,gif}', GLOB_BRACE);
+        
+        // Check if there are any images in the folder
+        if (!empty($image_files)) {
+            // Pick a random image
+            $random_image_path = $image_files[array_rand($image_files)];
+        
+            // Get the URL of the random image (convert the path to a URL)
+            $random_image_url = str_replace(ABSPATH, home_url('/'), $random_image_path);
+        
+            // Now use $random_image_url as the style image URL
+            $style_image_url = $random_image_url;
+        } else {
+            // Fallback image if no images are found
+            $style_image_url = 'https://pics.craiyon.com/2023-09-05/803e50d8347b470e8cb6b1eff41132bb.webp';
+        }
+        
+        $text_prompt = 'ultra-realistic character, cyborg portrait, close up, cybernetic augmentations, holographic UI elements, glowing tech implants, neon-lit urban environment, moody atmosphere, rain effects';
 
         // Step 1: Make a POST request to the cartoon API to generate the image
         $cartoon_response = generate_cartoon_image($image_url, $style_image_url, $text_prompt);
