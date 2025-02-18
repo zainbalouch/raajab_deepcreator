@@ -26,10 +26,24 @@ add_action('wp_enqueue_scripts', 'image_replacement_api_init');
 function handle_image_replacement() {
     // Check if the required data is sent
     if (isset($_POST['image_url'])) {
+        // $image_url = 'https://i1.rgstatic.net/ii/profile.image/11431281111388999-1672948153451_Q512/Zain-Ul-Eman.jpg';
+        
         // $image_url = sanitize_text_field($_POST['image_url']);
-        $image_url = 'https://i1.rgstatic.net/ii/profile.image/11431281111388999-1672948153451_Q512/Zain-Ul-Eman.jpg';
-        $style_image_url = 'https://pics.craiyon.com/2023-09-05/803e50d8347b470e8cb6b1eff41132bb.webp';
-        $text_prompt = 'make it animated Cyberpunk style character';
+        // Check if there are any images in the folder
+        // $image_directory = ABSPATH . 'wp-content/uploads/demo_images/';        
+        // $image_files = glob($image_directory . '*.{jpg,jpeg,png,webp,gif}', GLOB_BRACE);
+        // if (!empty($image_files)) {            
+        //     $random_image_path = $image_files[array_rand($image_files)];
+                    
+        //     $random_image_url = str_replace(ABSPATH, home_url('/'), $random_image_path);
+                    
+        //     $style_image_url = $random_image_url;
+        // } else {            
+        //     $style_image_url = 'https://pics.craiyon.com/2023-09-05/803e50d8347b470e8cb6b1eff41132bb.webp';
+        // }
+        // $style_image_url = 'https://pics.craiyon.com/2023-09-05/803e50d8347b470e8cb6b1eff41132bb.webp';
+        
+        // $text_prompt = 'ultra-realistic character, cyborg portrait, close up, cybernetic augmentations, holographic UI elements, glowing tech implants, neon-lit urban environment, moody atmosphere, rain effects';    
 
         // Step 1: Make a POST request to the cartoon API to generate the image
         // $cartoon_response = generate_cartoon_image($image_url, $style_image_url, $text_prompt);
@@ -76,12 +90,6 @@ function handle_image_replacement() {
 
         // Replace the old image with the new one
         if (rename($tmp_file, $target_path)) {
-            // Delete the old image (if it exists and isn't the same as the new one)
-                // if (file_exists($file_path) && $file_path !== $target_path) {
-                //     unlink($file_path); // Delete the old file
-                // }
-
-
             // Return the new image URL
             wp_send_json_success(array(
                 'new_image_url' => $parsed_url['scheme'] . '://' . $parsed_url['host'] . $parsed_url['path']
@@ -113,13 +121,16 @@ function download_image_from_url($image_url) {
     $tmp_file = tempnam(sys_get_temp_dir(), 'image_replace_');
     file_put_contents($tmp_file, $image_content);
 
+    // Set the file permissions to 644 (rw-r--r--)
+    chmod($tmp_file, 0644);
+
     return $tmp_file;
 }
 
 // Function to generate cartoon image using the external API
 function generate_cartoon_image($image_url, $style_image_url, $text_prompt) {
     $api_url = 'https://api.lightxeditor.com/external/api/v1/cartoon';
-    $api_key = 'c673d02654c34f5b90b3866e53230889_b4a8a2723de54d54849e538292cc2734_andoraitools';
+    $api_key = '22cd9ebbb6de42bb919ed2885d0a99b8_7e2a39c6872643188d92b9a9caa2cc5b_andoraitools';
 
     $body = json_encode(array(
         'imageUrl' => $image_url,
@@ -152,7 +163,7 @@ function generate_cartoon_image($image_url, $style_image_url, $text_prompt) {
 // Function to check the status of the image generation
 function get_image_generation_status($order_id) {
     $api_url = 'https://api.lightxeditor.com/external/api/v1/order-status';
-    $api_key = 'c673d02654c34f5b90b3866e53230889_b4a8a2723de54d54849e538292cc2734_andoraitools';
+    $api_key = '22cd9ebbb6de42bb919ed2885d0a99b8_7e2a39c6872643188d92b9a9caa2cc5b_andoraitools';
 
     $body = json_encode(array(
         'orderId' => $order_id
